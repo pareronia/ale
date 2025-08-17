@@ -36,6 +36,11 @@ function! ale#fixers#ruff_format#GetExecutable(buffer) abort
         return 'uv'
     endif
 
+    if (ale#Var(a:buffer, 'python_ruff_format_auto_uvx'))
+    \ && ale#python#UvPresent(a:buffer)
+        return 'uvx'
+    endif
+
     return ale#python#FindExecutable(a:buffer, 'python_ruff_format', ['ruff'])
 endfunction
 
@@ -43,7 +48,7 @@ function! ale#fixers#ruff_format#GetCommand(buffer) abort
     let l:executable = ale#fixers#ruff_format#GetExecutable(a:buffer)
     let l:exec_args = l:executable =~? '\(pipenv\|poetry\|uv\)$'
     \   ? ' run ruff'
-    \   : ''
+    \   : (l:executable =~? 'uvx' ? ' ruff' : '')
 
     return ale#Escape(l:executable) . l:exec_args
 endfunction
@@ -54,6 +59,10 @@ function! ale#fixers#ruff_format#Fix(buffer) abort
 
     if l:executable =~? '\(pipenv\|poetry\|uv\)$'
         call extend(l:cmd, ['run', 'ruff'])
+    endif
+
+    if l:executable =~? 'uvx'
+        call extend(l:cmd, ['ruff'])
     endif
 
     let l:options = ale#Var(a:buffer, 'python_ruff_format_options')

@@ -2017,6 +2017,17 @@ g:ale_python_ruff_auto_uv
   Set the executable to `uv` if true. This is overridden by a manually-set
   executable.
 
+                                             *ale-options.python_ruff_auto_uvx*
+                                                   *g:ale_python_ruff_auto_uvx*
+                                                   *b:ale_python_ruff_auto_uvx*
+python_ruff_auto_uvx
+g:ale_python_ruff_auto_uvx
+  Type: |Number|
+  Default: `0`
+
+  Set the executable to `uvx` if true. This is overridden by a manually-set
+  executable.
+
 
 ===============================================================================
 ruff-format                                            *ale-python-ruff-format*
@@ -2105,6 +2116,16 @@ g:ale_python_ruff_format_auto_uv
   Set the executable to `uv` if true. This is overridden by a manually-set
   executable.
 
+                                      *ale-options.python_ruff_format_auto_uvx*
+                                            *g:ale_python_ruff_format_auto_uvx*
+                                            *b:ale_python_ruff_format_auto_uvx*
+python_ruff_format_auto_uvx
+g:ale_python_ruff_format_auto_uvx
+  Type: |Number|
+  Default: `0`
+
+  Set the executable to `uvx` if true. This is overridden by a manually-set
+  executable.
 
 ===============================================================================
 unimport                                                  *ale-python-unimport*

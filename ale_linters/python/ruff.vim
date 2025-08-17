@@ -31,14 +31,19 @@ function! ale_linters#python#ruff#GetExecutable(buffer) abort
         return 'uv'
     endif
 
+    if (ale#Var(a:buffer, 'python_ruff_auto_uvx'))
+    \ && ale#python#UvPresent(a:buffer)
+        return 'uvx'
+    endif
+
     return ale#python#FindExecutable(a:buffer, 'python_ruff', ['ruff'])
 endfunction
 
 function! ale_linters#python#ruff#RunWithVersionCheck(buffer) abort
     let l:executable = ale_linters#python#ruff#GetExecutable(a:buffer)
-    let l:exec_args = l:executable =~? '\(pipenv\|poetry\|uv\)$'
-    \   ? ' run ruff'
-    \   : ''
+    let l:exec_args = l:executable =~? 'uvx'
+    \   ? ' ruff'
+    \   : (l:executable =~? '\(pipenv\|poetry\|uv\)$' ? ' run ruff' : '')
 
     let l:command = ale#Escape(l:executable) . l:exec_args . ' --version'
 
@@ -63,9 +68,9 @@ endfunction
 
 function! ale_linters#python#ruff#GetCommand(buffer, version) abort
     let l:executable = ale_linters#python#ruff#GetExecutable(a:buffer)
-    let l:exec_args = l:executable =~? '\(pipenv\|poetry\|uv\)$'
-    \   ? ' run ruff'
-    \   : ''
+    let l:exec_args = l:executable =~? 'uvx'
+    \   ? ' ruff'
+    \   : (l:executable =~? '\(pipenv\|poetry\|uv\)$' ? ' run ruff' : '')
 
     " NOTE: ruff 0.3.0 deprecates `ruff <path>` in favor of `ruff check <path>`
     let l:exec_args = l:exec_args
