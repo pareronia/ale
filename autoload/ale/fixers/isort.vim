@@ -24,6 +24,11 @@ function! ale#fixers#isort#GetExecutable(buffer) abort
         return 'uv'
     endif
 
+    if (ale#Var(a:buffer, 'python_isort_auto_uvx'))
+    \ && ale#python#UvPresent(a:buffer)
+        return 'uvx'
+    endif
+
     return ale#python#FindExecutable(a:buffer, 'python_isort', ['isort'])
 endfunction
 
@@ -35,6 +40,10 @@ function! ale#fixers#isort#GetCmd(buffer) abort
         call extend(l:cmd, ['run', 'isort'])
     endif
 
+    if l:executable =~? 'uvx'
+        call extend(l:cmd, ['isort'])
+    endif
+
     return join(l:cmd, ' ')
 endfunction
 
@@ -44,6 +53,10 @@ function! ale#fixers#isort#FixForVersion(buffer, version) abort
 
     if l:executable =~? '\(pipenv\|poetry\|uv\)$'
         call extend(l:cmd, ['run', 'isort'])
+    endif
+
+    if l:executable =~? 'uvx'
+        call extend(l:cmd, ['isort'])
     endif
 
     if ale#semver#GTE(a:version, [5, 7, 0])
